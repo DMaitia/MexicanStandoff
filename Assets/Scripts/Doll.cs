@@ -12,12 +12,12 @@ public class Doll : MonoBehaviour
     
     public void GetHurt(uint newHp)
     {
-        animator.Play("GettingHit");
+        animator.CrossFade("GettingHit", 0.1f);
     }
 
     public void GetKilled()
     {
-        animator.Play("GettingKilled");
+        animator.CrossFade("GettingKilled", 0.1f);
     }
 
     public void Heal(uint newHp)
@@ -27,14 +27,13 @@ public class Doll : MonoBehaviour
 
     public void Strike(GameObject targetDoll)
     {
-        animator.Play("Strike");
+        animator.CrossFade("Strike", 0.1f);
     }
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame

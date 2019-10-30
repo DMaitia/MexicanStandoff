@@ -21,6 +21,9 @@ public class GameView : MonoBehaviour
     public float radius;
 
     private List<GameObject> _dolls;
+
+    private uint _selectedDollId = 2; //Todo: desmockupear
+    
     void Start()
     {
         _dolls = new List<GameObject>();
@@ -49,9 +52,14 @@ public class GameView : MonoBehaviour
 
     public void SetEnemyDollSelected(uint idDoll)
     {
-        
+        _selectedDollId = idDoll;
     }
 
+    public void OnShotButtonClick()
+    {
+        PerformStrikeAnimation(0, (int)_selectedDollId, 0);
+    }
+    
     public void UpdateDollTimer(uint idDoll, uint time)
     {
            
