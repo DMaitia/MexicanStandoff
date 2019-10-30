@@ -42,6 +42,7 @@ public class GameView : MonoBehaviour
             
             GameObject doll = Instantiate(dollPrefab, dollPosition, Quaternion.identity) as GameObject;
             doll.transform.LookAt(Vector3.zero);
+            doll.AddComponent<Doll>();
             _dolls.Add(doll);
         }
     }
@@ -66,14 +67,20 @@ public class GameView : MonoBehaviour
         
     }
     
-    public void PerformStrikeAnimation(uint idDoll1, uint idDoll2)
+    public void PerformStrikeAnimation(int idDoll1, int idDoll2, uint newHp)
     {
-        
+        GameObject striker = _dolls[idDoll1];
+        GameObject target = _dolls[idDoll2];
+        striker.GetComponent<Doll>().Strike(target);
+        target.GetComponent<Doll>().GetHurt(newHp);
     }
 
-    public void PerformKillAnimation(uint idDoll1, uint idDoll2)
+    public void PerformKillAnimation(int idDoll1, int idDoll2)
     {
-        
+        GameObject striker = _dolls[idDoll1];
+        GameObject target = _dolls[idDoll2];
+        striker.GetComponent<Doll>().Strike(target);
+        target.GetComponent<Doll>().GetKilled();
     }
 
     public void PerformHealingAnimation(uint idDoll)

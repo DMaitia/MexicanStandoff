@@ -12,12 +12,12 @@ public class Doll : MonoBehaviour
     
     public void GetHurt(uint newHp)
     {
-        
+        animator.Play("GettingHit");
     }
 
     public void GetKilled()
     {
-        
+        animator.Play("GettingKilled");
     }
 
     public void Heal(uint newHp)
@@ -27,7 +27,7 @@ public class Doll : MonoBehaviour
 
     public void Strike(GameObject targetDoll)
     {
-        
+        animator.Play("Strike");
     }
     
     
