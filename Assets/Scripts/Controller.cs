@@ -10,8 +10,8 @@ public class Controller
     private uint _minDamage;
     private uint _maxDamage;
     //private GameView gameView
-    
-    Controller(uint playersAmount, uint minDamage, uint maxDamage, uint initialHp = 1000)
+
+    public Controller(uint playersAmount, uint minDamage, uint maxDamage, uint initialHp = 1000)
     {
         _players = new List<Player>();
         _random = new Random();
@@ -30,7 +30,7 @@ public class Controller
             _players.Add(player);
         }
     }
-    
+
     public bool Strike(Player attacker, Player target)
     {
         if (!target.IsAlive() && attacker.GetId() == target.GetId())
