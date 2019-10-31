@@ -372,9 +372,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersAmount: 4
-  minDamage: 0
-  maxDamage: 0
-  initialHp: 0
+  minDamage: 5
+  maxDamage: 100
+  initialHp: 1000
   dollPrefab: {fileID: 3192265899133208376, guid: c08947d8f4c18c572ab85ba19dfc3451,
     type: 3}
   radius: 5

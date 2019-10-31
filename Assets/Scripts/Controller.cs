@@ -7,12 +7,13 @@ public class Controller
     private uint _playerId;
     private List<Player> _players;
     private Random _random;
-    private uint _minDamage;
-    private uint _maxDamage;
-    //private GameView gameView
+    private int _minDamage;
+    private int _maxDamage;
+    private GameView _gameView;
 
-    public Controller(uint playersAmount, uint minDamage, uint maxDamage, uint initialHp = 1000)
+    public Controller(GameView gameView, int playersAmount, int minDamage, int maxDamage, int initialHp = 1000)
     {
+        _gameView = gameView;
         _players = new List<Player>();
         _random = new Random();
 
@@ -24,29 +25,30 @@ public class Controller
             playersAmount = 3;
         }
 
-        for (uint i = 0; i < playersAmount; i++)
+        for (int i = 0; i < playersAmount; i++)
         {
             Player player = new Player(i, initialHp);
             _players.Add(player);
         }
     }
 
-    public bool Strike(Player attacker, Player target)
+    public bool Strike(int attackerId, int targetId)
     {
+        Player attacker = _players[attackerId];
+        Player target = _players[targetId];
         if (!target.IsAlive() && attacker.GetId() == target.GetId())
         {
             return false;
         }
 
-        var damageAmount = _random.Next((int)_minDamage, (int)_maxDamage);
         target.ReceiveStrike(new Strike(_random)); //todo: refactor with Action
         if (target.IsAlive())
         {
-            //TODO: GameView.performStrikeAnimation(attacker.GetId(), target.GetId())
+            _gameView.PerformStrikeAnimation(attackerId, targetId, target.GetHp());
         }
         else
         {
-            //TODO: GameView.performKillAnimation(attacker.GetId(), target.GetId());
+            _gameView.PerformKillAnimation(attackerId, targetId);
         }
         return true;
     }
@@ -59,7 +61,7 @@ public class Controller
         }
         
         player.Heal(new Healing(_random));
-        //TODO: GameView.performHealingAnimation(player.GetId());
+        _gameView.PerformHealingAnimation(player.GetId());
         return true;
     }
     

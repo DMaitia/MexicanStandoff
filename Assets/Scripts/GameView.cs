@@ -6,15 +6,17 @@ using UnityEngine.Serialization;
 
 public class GameView : MonoBehaviour
 {
+    private const int MainPlayerId = 0;
+    
     private Controller _controller;
 
-    public uint playersAmount;
+    public int playersAmount;
 
-    public uint minDamage;
+    public int minDamage;
 
-    public uint maxDamage;
+    public int maxDamage;
 
-    public uint initialHp;
+    public int initialHp;
     
     public GameObject dollPrefab;
     
@@ -22,12 +24,12 @@ public class GameView : MonoBehaviour
 
     private List<GameObject> _dolls;
 
-    private uint _selectedDollId = 2; //Todo: desmockupear
+    private int _selectedDollId = 2; //Todo: desmockupear
     
     void Start()
     {
         _dolls = new List<GameObject>();
-//        _controller = new Controller(playersAmount, minDamage, maxDamage, initialHp);    
+        _controller = new Controller(this, playersAmount, minDamage, maxDamage, initialHp);    
         SpawnDolls();
     }
 
@@ -38,9 +40,9 @@ public class GameView : MonoBehaviour
         double theta = 0;
         for (int i = 0; i < playersAmount; i++)
         {
-            Vector3 dollPosition = new Vector3((float) (radius*Math.Cos(theta)),
-                                       arenaPosition.y, (float) (radius*Math.Sin(theta))
-                                       ) - arenaPosition;
+            Vector3 dollPosition = new Vector3((float) (radius * Math.Cos(theta)),
+                arenaPosition.y, (float) (radius * Math.Sin(theta))
+            );
             theta += angleBetweenDolls;
             
             GameObject doll = Instantiate(dollPrefab, dollPosition, Quaternion.identity) as GameObject;
@@ -50,19 +52,19 @@ public class GameView : MonoBehaviour
         }
     }
 
-    public void SetEnemyDollSelected(uint idDoll)
+    public void SetEnemyDollSelected(int idDoll)
     {
         _selectedDollId = idDoll;
     }
 
     public void OnShotButtonClick()
     {
-        PerformStrikeAnimation(0, (int)_selectedDollId, 0);
+        _controller.Strike(MainPlayerId, _selectedDollId);
     }
     
     public void UpdateDollTimer(uint idDoll, uint time)
     {
-           
+        
     }
 
     public void DisplayConfiguration()
@@ -75,7 +77,7 @@ public class GameView : MonoBehaviour
         
     }
     
-    public void PerformStrikeAnimation(int idDoll1, int idDoll2, uint newHp)
+    public void PerformStrikeAnimation(int idDoll1, int idDoll2, int newHp)
     {
         GameObject striker = _dolls[idDoll1];
         GameObject target = _dolls[idDoll2];
@@ -91,9 +93,8 @@ public class GameView : MonoBehaviour
         target.GetComponent<Doll>().GetKilled();
     }
 
-    public void PerformHealingAnimation(uint idDoll)
+    public void PerformHealingAnimation(int idDoll)
     {
         
     }
-    
 }

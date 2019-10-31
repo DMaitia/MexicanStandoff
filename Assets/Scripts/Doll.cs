@@ -5,12 +5,12 @@ using UnityEngine;
 public class Doll : MonoBehaviour
 {
     private int _secondsToAct;
-    private uint _hp;
+    private int _hp;
 
     public GameObject infoDisplay;
     public Animator animator;
     
-    public void GetHurt(uint newHp)
+    public void GetHurt(int newHp)
     {
         animator.CrossFade("GettingHit", 0.1f);
     }
