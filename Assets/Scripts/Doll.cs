@@ -27,18 +27,34 @@ public class Doll : MonoBehaviour
 
     public void Strike(GameObject targetDoll)
     {
+        StartCoroutine(OnStrikeStart(targetDoll));
+        gameObject.transform.LookAt(targetDoll.transform.position);
         animator.CrossFade("Strike", 0.1f);
+        StartCoroutine(OnStrikeEnd(targetDoll));
     }
 
+    private IEnumerator OnStrikeStart(GameObject targetDoll)
+    {
+        //TODO: make code so that the rotation is done smoothly
+        gameObject.transform.LookAt(targetDoll.transform.position);
+        yield return null;
+    }
+    
+    private IEnumerator OnStrikeEnd(GameObject targetDoll)
+    {
+        //TODO: fix that and make code so that the rotation is done smoothly
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Standing"))
+        {
+            gameObject.transform.LookAt(Vector3.zero);
+        }
+        yield return null;
+    }
+
+    
     // Start is called before the first frame update
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
