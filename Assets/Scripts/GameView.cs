@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,14 +10,6 @@ public class GameView : MonoBehaviour
     private const int MainPlayerId = 0;
     
     private Controller _controller;
-
-    public int playersAmount;
-
-    public int minDamage;
-
-    public int maxDamage;
-
-    public int initialHp;
     
     public GameObject dollPrefab;
     
@@ -25,20 +18,25 @@ public class GameView : MonoBehaviour
     private List<GameObject> _dolls;
 
     private int _selectedDollId = 2; //Todo: desmockupear
+
+    private Settings _settings;
     
     void Start()
     {
         _dolls = new List<GameObject>();
-        _controller = new Controller(this, playersAmount, minDamage, maxDamage, initialHp);    
+
+        _settings = new Settings(3, 10, 100, 1000, 5, 5);
+        
+        _controller = new Controller(this, _settings);    
         SpawnDolls();
     }
 
     private void SpawnDolls()
     {
         Vector3 arenaPosition = gameObject.transform.position;
-        double angleBetweenDolls = (2*Math.PI) / playersAmount;
+        double angleBetweenDolls = (2*Math.PI) / _settings.PlayersAmount;
         double theta = 0;
-        for (int i = 0; i < playersAmount; i++)
+        for (int i = 0; i < _settings.PlayersAmount; i++)
         {
             Vector3 dollPosition = new Vector3((float) (radius * Math.Cos(theta)),
                 arenaPosition.y, (float) (radius * Math.Sin(theta))

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using DefaultNamespace;
 
 public class Controller
 {
@@ -10,24 +11,19 @@ public class Controller
     private int _minDamage;
     private int _maxDamage;
     private GameView _gameView;
-
-    public Controller(GameView gameView, int playersAmount, int minDamage, int maxDamage, int initialHp = 1000)
+    private Settings _settings;
+    
+    public Controller(GameView gameView, Settings settings)
     {
         _gameView = gameView;
+        _settings = settings;
+        
         _players = new List<Player>();
         _random = new Random();
 
-        _minDamage = (minDamage < 5) ? minDamage : 5;
-        _maxDamage = (maxDamage > 100) ? maxDamage : 100;
-        
-        if (playersAmount < 3)
+        for (int i = 0; i < _settings.PlayersAmount; i++)
         {
-            playersAmount = 3;
-        }
-
-        for (int i = 0; i < playersAmount; i++)
-        {
-            Player player = new Player(i, initialHp);
+            Player player = new Player(i, _settings.InitialHp);
             _players.Add(player);
         }
     }
