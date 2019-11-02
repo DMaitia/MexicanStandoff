@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Control;
 
 namespace MockServer
 {
@@ -16,7 +17,10 @@ namespace MockServer
         }
 
         private void InitBots() {
-			
+            for (int id = 1; id < _playersAmount; id++)
+            {
+                
+            }
         }
 
         IEnumerator RunBot()

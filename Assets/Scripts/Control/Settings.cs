@@ -1,13 +1,13 @@
-namespace DefaultNamespace
+namespace Control
 {
     public class Settings
     {
         //Ranges
-        public const float MIN_BOT_ATTACK_HEAL_RATE = 0.1f;
-        public const float MAX_BOT_ATTACK_HEAL_RATE = 0.9f;
-        public const int MIN_PLAYERS = 3;
-        public const int MIN_DAMAGE = 1;
-        public const int MIN_HP = 1;
+        public const float MinBotAttackHealRate = 0.1f;
+        public const float MaxBotAttackHealRate = 0.9f;
+        public const int MinPlayers = 3;
+        public const int MinDamage = 1;
+        public const int MinHp = 1;
         
         private int _playersAmount;
         private int _minDamage;
@@ -29,16 +29,16 @@ namespace DefaultNamespace
         public int PlayersAmount
         {
             get => _playersAmount;
-            set => _playersAmount = (value < MIN_PLAYERS) ? MIN_PLAYERS : value;
+            set => _playersAmount = (value < MinPlayers) ? MinPlayers : value;
         }
 
-        public int MinDamage
+        public int MinimumDamage
         {
             get => _minDamage;
-            set => _minDamage = (value < MIN_DAMAGE) ? MIN_DAMAGE : value;
+            set => _minDamage = (value < MinDamage) ? MinDamage : value;
         }
 
-        public int MaxDamage
+        public int MaximumDamage
         {
             get => _maxDamage;
             set => _maxDamage = (value < _minDamage) ? _minDamage + 1 : value;
@@ -47,7 +47,7 @@ namespace DefaultNamespace
         public int InitialHp
         {
             get => _initialHp;
-            set => _initialHp = (value <= 0) ? MIN_HP : value;
+            set => _initialHp = (value <= 0) ? MinHp : value;
         }
 
         public int MeanTimeBetweenActions
@@ -62,10 +62,10 @@ namespace DefaultNamespace
             get => _botAttackHealRate;
             set
             {
-                if (value < MIN_BOT_ATTACK_HEAL_RATE)
-                    _botAttackHealRate = MIN_BOT_ATTACK_HEAL_RATE;
-                else if (value > MAX_BOT_ATTACK_HEAL_RATE)
-                    _botAttackHealRate = MAX_BOT_ATTACK_HEAL_RATE;
+                if (value < MinBotAttackHealRate)
+                    _botAttackHealRate = MinBotAttackHealRate;
+                else if (value > MaxBotAttackHealRate)
+                    _botAttackHealRate = MaxBotAttackHealRate;
                 else
                     _botAttackHealRate = value;
             }
