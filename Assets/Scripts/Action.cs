@@ -1,40 +1,33 @@
 using System;
+using Probability;
 
 public abstract class Action
 {
-    protected uint MinPoints;
-    protected uint MaxPoints;
-    protected Random Random;
-    protected static int Value;
-
-    public Action(Random random, uint minPoints = 10, uint maxPoints = 100)
+    protected static int _value;
+    
+    public Action(Distribution distribution)
     {
-        Random = random;
-        MinPoints = minPoints;
-        MaxPoints = maxPoints;
-        Value = random.Next((int)MinPoints, (int)MaxPoints);
+        _value = (int) distribution.F(RandomSingleton.Instance.GetRandom());
     }
 
     public int GetValue()
     {
-        return Value;
+        return _value;
     }
-        
+
 }
 
 public class Strike : Action
 {
-    public Strike(Random random) : base(random)
+    public Strike(Distribution distribution) : base(distribution)
     {
     }
-    
 }
 
 
 public class Healing : Action
 {
-    public Healing(Random random) : base(random)
+    public Healing(Distribution distribution) : base(distribution)
     {
     }
-    
 }

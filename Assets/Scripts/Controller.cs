@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using DefaultNamespace;
+using Probability;
 
 public class Controller
 {
@@ -37,7 +38,7 @@ public class Controller
             return false;
         }
 
-        target.ReceiveStrike(new Strike(_random)); //todo: refactor with Action
+        target.ReceiveStrike(new Strike(new Uniform())); //todo: refactor with Action
         if (target.IsAlive())
         {
             _gameView.PerformStrikeAnimation(attackerId, targetId, target.GetHp());
@@ -56,7 +57,7 @@ public class Controller
             return false;
         }
         
-        player.Heal(new Healing(_random));
+        player.Heal(new Healing(new Uniform()));
         _gameView.PerformHealingAnimation(player.GetId());
         return true;
     }
