@@ -34,6 +34,11 @@ namespace Probability
             return _random.Next(LOWER_LIMIT, UPPER_LIMIT);
         }
 
+        public int GetRandom(int lowerLimit, int upperLimit)
+        {
+            return _random.Next(lowerLimit, upperLimit);
+        }
+
         /**
          * GetRandomNormalized()
          * Returns a float in the range [0,1]

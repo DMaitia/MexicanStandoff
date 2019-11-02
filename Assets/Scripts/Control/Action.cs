@@ -9,7 +9,8 @@ namespace Control
     
         public Action(Distribution distribution)
         {
-            _value = (int) distribution.F(RandomSingleton.Instance.GetRandom());
+            
+            _value = (int) (distribution.F(RandomSingleton.Instance.GetRandom()) * 90);
         }
 
         public int GetValue()
