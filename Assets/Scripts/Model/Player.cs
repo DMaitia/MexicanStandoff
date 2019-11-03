@@ -1,3 +1,4 @@
+using System;
 using Control;
 using Probability;
 using UnityEngine;
@@ -10,26 +11,46 @@ namespace Model
         
         private int _hp;
 
+        private DateTime _nextActionDateTime;
+
+        private DateTime _lastActionDateTime;
+        
         private Distribution _distribution;
-        //Todo: add time to action
-    
-        public Player(int id, int initialHp, Distribution distribution)
+        
+        public Player(int id, int initialHp, Distribution distribution, int secondsBetweenActions)
         {
             _id = id;
             _hp = initialHp;
             _distribution = distribution;
+            _lastActionDateTime = DateTime.Now;
+            _nextActionDateTime = _lastActionDateTime + new TimeSpan(0,0,0,secondsBetweenActions);
         }
+        
+        public int Id => _id;
 
-        public int GetId()
+        public int Hp
         {
-            return _id;
+            get => _hp;
+            set => _hp = value;
         }
 
+        public DateTime NextActionDateTime
+        {
+            get => _nextActionDateTime;
+            set => _nextActionDateTime = value;
+        }
+
+        public DateTime LastActionDateTime
+        {
+            get => _lastActionDateTime;
+            set => _lastActionDateTime = value;
+        }
+        
         public bool IsAlive()
         {
             return _hp > 0;
         }
-
+        
         public void Strike(Player target)
         {
             Strike strike = new Strike(_distribution);
@@ -49,21 +70,15 @@ namespace Model
             int newHp = _hp + healing.GetValue();
             _hp = (newHp < 1000 ? newHp : 1000); //TODO: deharcode those numbers
         }
-    
-        public int GetHp()
+        
+        public bool WaitingTimeToActionIsOver()
         {
-            return _hp;
+            return _nextActionDateTime < DateTime.Now;
         }
 
-        public void SetHp(int newHp)
+        public double SecondsToNextAction()
         {
-            _hp = newHp;
-        }
-
-        public bool CanStrike()
-        {
-            //Todo: check timer
-            return true;
+            return (NextActionDateTime - DateTime.Now).TotalSeconds;
         }
     }
 }

@@ -13,16 +13,16 @@ namespace Control
         private int _minDamage;
         private int _maxDamage;
         private int _initialHp;
-        private int _meanSecondsBetweenActions;
+        private int _secondsBetweenActions;
         private float _botAttackHealRate;
 
-        public Settings(int playersAmount, int minDamage, int maxDamage, int initialHp, int meanSecondsBetweenActions, float botAttackHealRate)
+        public Settings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate)
         {
             _playersAmount = playersAmount;
             _minDamage = minDamage;
             _maxDamage = maxDamage;
             _initialHp = initialHp;
-            _meanSecondsBetweenActions = meanSecondsBetweenActions;
+            _secondsBetweenActions = secondsBetweenActions;
             _botAttackHealRate = botAttackHealRate;
         }
 
@@ -50,11 +50,11 @@ namespace Control
             set => _initialHp = (value <= 0) ? MinHp : value;
         }
 
-        public int MeanTimeBetweenActions
+        public int MillisecondsBetweenActions
         {
             //TODO: do the random distribution stuff
-            get => _meanSecondsBetweenActions;
-            set => _meanSecondsBetweenActions = (value <= 0) ? 1 : value;
+            get => _secondsBetweenActions;
+            set => _secondsBetweenActions = (value <= 0) ? 1 : value;
         }
 
         public float BotAttackHealRate

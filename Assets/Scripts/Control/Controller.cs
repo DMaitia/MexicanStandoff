@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bots;
 using Model;
 using Probability;
@@ -9,6 +10,7 @@ namespace Control
     {
 //    private uint _playerId;
         private List<Player> _players;
+
         private GameView _gameView;
         private Settings _settings;
         private MockServer _mockServer;
@@ -19,11 +21,11 @@ namespace Control
             _settings = settings;
             
             _players = new List<Player>();
+            
             _mockServer = new MockServer(this, _settings.PlayersAmount);
             for (int id = 0; id < _settings.PlayersAmount; id++)
             {
-                Player player = new Player(id, _settings.InitialHp, new Uniform());
-                _players.Add(player);
+                _players.Add(new Player(id, _settings.InitialHp, new Uniform(), _settings.MillisecondsBetweenActions));
             }
             
             _mockServer.InitBots();
@@ -33,7 +35,7 @@ namespace Control
         {
             Player attacker = _players[attackerId];
             Player target = _players[targetId];
-            if (!target.IsAlive() && attacker.GetId() == target.GetId())
+            if (!target.IsAlive() || attacker.Id == target.Id)
             {
                 return false;
             }
@@ -41,7 +43,7 @@ namespace Control
             attacker.Strike(target);
             if (target.IsAlive())
             {
-                _gameView.PerformStrikeAnimation(attackerId, targetId, target.GetHp());
+                _gameView.PerformStrikeAnimation(attackerId, targetId, target.Hp);
             }
             else
             {
@@ -59,14 +61,53 @@ namespace Control
             }
         
             target.Heal();
-            _gameView.PerformHealingAnimation(target.GetId());
+            _gameView.PerformHealingAnimation(target.Id);
             return true;
         }
 
-        public void AssessBot(int botId, Bot.ActionType actionType)
+        /*
+         * Return: Amount of milliseconds for the bot to wait until a new action is possible.
+         */
+        public DateTime AssessBot(int botId, Bot.ActionType actionType)
         {
+            var player = _players[botId];
+            if (!player.WaitingTimeToActionIsOver()) return player.NextActionDateTime;
             
+            switch (actionType)
+            {
+                case Bot.ActionType.Heal:
+                {
+                    Heal(player.Id);
+                    break;
+                }
+                case Bot.ActionType.Strike:
+                {
+                    Strike(player.Id, LowerHpPlayer(player).Id);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null);
+            }
+            
+            player.LastActionDateTime = DateTime.Now;
+            player.NextActionDateTime = DateTime.Now + new TimeSpan(0,0,0,_settings.MillisecondsBetweenActions);
+
+            return player.NextActionDateTime;
         }
-    
+
+        private Player LowerHpPlayer(Player attacker)
+        {
+            var weakestEnemy = _players[0];
+            for (int i = 1; i < _players.Count; i++)
+            {
+                Player player = _players[i];
+                if (player.Hp < weakestEnemy.Hp && weakestEnemy.Id != attacker.Id)
+                {
+                    weakestEnemy = player;
+                }
+            }
+
+            return weakestEnemy;
+        }
     }
 }

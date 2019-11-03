@@ -22,12 +22,14 @@ namespace Bots
         }
 
         public void InitBots() {
-            for (int id = 1; id < _playersAmount; id++)
+            for (var id = 1; id < _playersAmount; id++)
             {
                 Thread thread = new Thread(new Bot(id, this, 0.5f).Run);
                 _threads.Add(thread);
                 thread.Start();
             }
+            
+            
         }
 
         private void PauseBots()
@@ -39,8 +41,12 @@ namespace Bots
         {
             lock (_controllerAccessLock)
             {
-                Debug.Log("Bot " + bot.GetId() + " informed the controller that it is going to " + bot.Act());
-                _controller.AssessBot(bot.GetId(), bot.Act());
+                Debug.Log("Bot " + bot.Id + " informed the controller that it is going to " + bot.Act());
+                
+                var nextBotActionDateTime = _controller.AssessBot(bot.Id, bot.Act());
+
+                bot.DateToWakeUp = nextBotActionDateTime;
+                
             }
         }
         
