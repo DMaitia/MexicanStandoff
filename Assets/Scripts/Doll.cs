@@ -27,30 +27,32 @@ public class Doll : MonoBehaviour
 
     public void Strike(GameObject targetDoll)
     {
-        StartCoroutine(OnStrikeStart(targetDoll));
-        gameObject.transform.LookAt(targetDoll.transform.position);
+        OnStrikeStart(targetDoll);
         animator.CrossFade("Strike", 0.1f);
-        StartCoroutine(OnStrikeEnd(targetDoll));
     }
 
-    private IEnumerator OnStrikeStart(GameObject targetDoll)
+    private void OnStrikeStart(GameObject targetDoll)
     {
-        //TODO: make code so that the rotation is done smoothly
-        gameObject.transform.LookAt(targetDoll.transform.position);
-        yield return null;
+        StartCoroutine(LookAtSmoothly(targetDoll));
     }
-    
-    private IEnumerator OnStrikeEnd(GameObject targetDoll)
+
+    private IEnumerator LookAtSmoothly(GameObject targetDoll)
     {
-        //TODO: fix that and make code so that the rotation is done smoothly
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Standing"))
+        float elapsedTime = 0f;
+        float time = 0.5f;
+        var dollTransform = transform;
+        var startingRotation = dollTransform.rotation;
+        Vector3 orientation = targetDoll.transform.position - gameObject.transform.position;
+        while (elapsedTime < time)
         {
-            gameObject.transform.LookAt(Vector3.zero);
+            elapsedTime += Time.deltaTime;
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(orientation), Time.time * 5f);
+            transform.rotation = Quaternion.Slerp(startingRotation, rotation, (elapsedTime / time));
+            yield return new WaitForEndOfFrame();
         }
-        yield return null;
     }
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
