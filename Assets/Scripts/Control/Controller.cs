@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bots;
 using Model;
 using Probability;
+using UnityEngine;
 
 namespace Control
 {
@@ -94,17 +95,37 @@ namespace Control
 
         private Player LowerHpPlayer(Player attacker)
         {
-            var weakestEnemy = _players[0];
-            for (int i = 1; i < _players.Count; i++)
+            //Take the first alive enemy
+            Player weakestEnemy = GetFirstEnemyAlive(attacker);
+            if (weakestEnemy == null)
             {
-                Player player = _players[i];
-                if (player.Hp < weakestEnemy.Hp && weakestEnemy.Id != attacker.Id && weakestEnemy.IsAlive())
+                Debug.Log("X");
+                return null;
+            }
+            
+            foreach (var player in _players)
+            {
+                if ( weakestEnemy.Id != player.Id && player.Hp < weakestEnemy.Hp && player.IsAlive())
                 {
                     weakestEnemy = player;
                 }
             }
+            Debug.Log("Weakest ennemy : " + weakestEnemy.Id + " with health: " + weakestEnemy.Hp);
 
             return weakestEnemy;
+        }
+
+        private Player GetFirstEnemyAlive(Player attacker)
+        {
+            foreach (var player in _players)
+            {
+                if (player.Id != attacker.Id && player.IsAlive())
+                {
+                    return player;
+                }
+            }
+
+            return null;
         }
     }
 }

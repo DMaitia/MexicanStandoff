@@ -26,7 +26,7 @@ public class GameView : MonoBehaviour
     {
         _dolls = new List<GameObject>();
 
-        _settings = new Settings(5, 10, 100, 1000, 5, 5);
+        _settings = new Settings(5, 10, 100, 1000, 2, 0.5f);
         
         _controller = new Controller(this, _settings);    
         
