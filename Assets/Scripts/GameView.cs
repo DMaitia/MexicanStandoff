@@ -117,7 +117,8 @@ public class GameView : MonoBehaviour
 
     public void PerformHealingAnimation(int idDoll)
     {
-        
+        GameObject target = _dolls[idDoll];
+        target.GetComponent<Doll>().Heal(100);//TODO? hace falta?
     }
 
     public void FinishGame()
