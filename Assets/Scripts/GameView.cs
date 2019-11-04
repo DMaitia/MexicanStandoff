@@ -103,6 +103,18 @@ public class GameView : MonoBehaviour
         target.GetComponent<Doll>().GetKilled();
     }
 
+    public void HideKilledPlayer(int idDoll)
+    {
+        GameObject doll = _dolls[idDoll];
+        StartCoroutine(HideAfterEndOfKillingAnimation(doll));
+    }
+
+    private IEnumerator HideAfterEndOfKillingAnimation(GameObject doll)
+    {
+        yield return new WaitForSeconds(5);;
+        doll.SetActive(false);
+    }
+
     public void PerformHealingAnimation(int idDoll)
     {
         

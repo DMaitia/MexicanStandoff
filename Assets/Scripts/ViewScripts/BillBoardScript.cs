@@ -10,7 +10,7 @@ namespace ViewScripts
         void Start()
         {
             if (Camera.main != null) _mainCamera = Camera.main.gameObject;
-            gameObject.transform.LookAt(_mainCamera.transform.position);
+            gameObject.transform.LookAt(-_mainCamera.transform.position);
         }
     }
 }

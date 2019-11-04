@@ -8,7 +8,6 @@ namespace Control
 {
     public class Controller
     {
-//    private uint _playerId;
         private List<Player> _players;
 
         private GameView _gameView;
@@ -45,6 +44,7 @@ namespace Control
             else
             {
                 _gameView.PerformKillAnimation(attackerId, targetId);
+                _gameView.HideKilledPlayer(targetId);
             }
             return true;
         }
@@ -98,7 +98,7 @@ namespace Control
             for (int i = 1; i < _players.Count; i++)
             {
                 Player player = _players[i];
-                if (player.Hp < weakestEnemy.Hp && weakestEnemy.Id != attacker.Id)
+                if (player.Hp < weakestEnemy.Hp && weakestEnemy.Id != attacker.Id && weakestEnemy.IsAlive())
                 {
                     weakestEnemy = player;
                 }
