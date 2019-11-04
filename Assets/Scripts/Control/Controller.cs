@@ -29,6 +29,10 @@ namespace Control
             _endOfGameDateTime = DateTime.Now + settings.MatchDuration;
         }
 
+        public List<Player> GetPlayers()
+        { //TODO: la vista no debería acceder a esto
+            return _players;
+        }
         public void Strike(int attackerId, int targetId)
         {
             Player attacker = _players[attackerId];

@@ -13,7 +13,11 @@ public class GameView : MonoBehaviour
     private Controller _controller;
     
     public GameObject dollPrefab;
-    
+
+    public GameObject scoreBoard;
+
+    public GameObject settingsMenu;
+
     public float radius;
 
     private List<GameObject> _dolls;
@@ -79,9 +83,14 @@ public class GameView : MonoBehaviour
 
     public void DisplayConfiguration()
     {
-        
+        settingsMenu.SetActive(true);
     }
 
+    public void DisplayScoreboard()
+    {
+        scoreBoard.GetComponent<ScoreboardScript>().ShowPlayers(_controller.GetPlayers());
+        scoreBoard.SetActive(true);
+    }
     public void DisplayLog()
     {
         
