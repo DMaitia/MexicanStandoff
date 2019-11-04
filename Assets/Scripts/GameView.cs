@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Bots;
 using Control;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -28,7 +29,10 @@ public class GameView : MonoBehaviour
         _settings = new Settings(5, 10, 100, 1000, 5, 5);
         
         _controller = new Controller(this, _settings);    
+        
         SpawnDolls();
+        
+        AddBotBehaviours();
     }
 
     private void SpawnDolls()
@@ -47,6 +51,14 @@ public class GameView : MonoBehaviour
             doll.transform.LookAt(Vector3.zero);
             doll.AddComponent<Doll>();
             _dolls.Add(doll);
+        }
+    }
+
+    private void AddBotBehaviours()
+    {
+        for (var id = 1; id < _settings.PlayersAmount; id++)
+        {
+            Bot.CreateBot(_dolls[id], id, _settings.BotAttackHealRate, _controller);
         }
     }
 

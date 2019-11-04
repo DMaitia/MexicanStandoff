@@ -13,7 +13,6 @@ namespace Control
 
         private GameView _gameView;
         private Settings _settings;
-        private MockServer _mockServer;
     
         public Controller(GameView gameView, Settings settings)
         {
@@ -22,13 +21,11 @@ namespace Control
             
             _players = new List<Player>();
             
-            _mockServer = new MockServer(this, _settings.PlayersAmount);
             for (int id = 0; id < _settings.PlayersAmount; id++)
             {
                 _players.Add(new Player(id, _settings.InitialHp, new Uniform(), _settings.MillisecondsBetweenActions));
             }
             
-            _mockServer.InitBots();
         }
 
         public bool Strike(int attackerId, int targetId)

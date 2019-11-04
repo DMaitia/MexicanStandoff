@@ -1,24 +1,35 @@
 
 using System;
 using System.Threading;
+using Control;
 using Probability;
+using UnityEngine;
 
 namespace Bots
 {
-    public class Bot
+    public class Bot : MonoBehaviour
     {
         public enum ActionType {Strike, Heal}
         
-        private readonly float _attackVsHealRate;
-        private readonly int _id;
-        private readonly MockServer _mockServer;
+        private float _attackVsHealRate;
+        private int _id;
+        private Controller _controller;
         private DateTime _dateToWakeUp;
+
+        public static Bot CreateBot(GameObject doll, int id, float attackVsHealRate, Controller controller)
+        {
+            Bot bot = doll.AddComponent<Bot>();
+            bot._id = id;
+            bot._attackVsHealRate = attackVsHealRate;
+            bot._controller = controller;
+            return bot;
+        }
         
-        public Bot(int id, MockServer mockServer, float attackVsHealRate)
+        private Bot(int id, float attackVsHealRate, Controller controller)
         {
             _id = id;
             _attackVsHealRate = attackVsHealRate;
-            _mockServer = mockServer;
+            _controller = controller;
             _dateToWakeUp = DateTime.Now + new TimeSpan(0, 0, 0, 5);
         }
 
@@ -30,16 +41,15 @@ namespace Bots
             set => _dateToWakeUp = value;
         }
 
-        public void Run()
+        public void Update()
         {
-            for (int i = 0; i < 5; i++)
+            if (_dateToWakeUp < DateTime.Now)
             {
-                Thread.Sleep(_dateToWakeUp - DateTime.Now);
-                _mockServer.InformController(this);
+                _dateToWakeUp = _controller.AssessBot(_id, Act());
             }
         }
-        
-        public ActionType Act()
+
+        private ActionType Act()
         {
             var n = RandomSingleton.Instance.GetRandomNormalized();
             return n < _attackVsHealRate ? ActionType.Strike : ActionType.Heal;
