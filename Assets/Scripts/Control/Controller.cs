@@ -10,10 +10,10 @@ namespace Control
     public class Controller
     {
         private List<Player> _players;
-
         private GameView _gameView;
         private Settings _settings;
-    
+        private DateTime _endOfGameDateTime;
+        
         public Controller(GameView gameView, Settings settings)
         {
             _gameView = gameView;
@@ -25,16 +25,17 @@ namespace Control
             {
                 _players.Add(new Player(id, _settings.InitialHp, new Uniform(), _settings.MillisecondsBetweenActions));
             }
-            
+
+            _endOfGameDateTime = DateTime.Now + settings.MatchDuration;
         }
 
-        public bool Strike(int attackerId, int targetId)
+        public void Strike(int attackerId, int targetId)
         {
             Player attacker = _players[attackerId];
             Player target = _players[targetId];
             if (!target.IsAlive() || attacker.Id == target.Id)
             {
-                return false;
+                return;
             }
 
             attacker.Strike(target);
@@ -47,7 +48,11 @@ namespace Control
                 _gameView.PerformKillAnimation(attackerId, targetId);
                 _gameView.HideKilledPlayer(targetId);
             }
-            return true;
+
+            if (IsGameOver())
+            {
+                _gameView.FinishGame();
+            };
         }
 
         public bool Heal(int targetId)
@@ -99,7 +104,6 @@ namespace Control
             Player weakestEnemy = GetFirstEnemyAlive(attacker);
             if (weakestEnemy == null)
             {
-                Debug.Log("X");
                 return null;
             }
             
@@ -110,7 +114,6 @@ namespace Control
                     weakestEnemy = player;
                 }
             }
-            Debug.Log("Weakest ennemy : " + weakestEnemy.Id + " with health: " + weakestEnemy.Hp);
 
             return weakestEnemy;
         }
@@ -124,8 +127,31 @@ namespace Control
                     return player;
                 }
             }
-
             return null;
+        }
+
+        private bool IsGameOver()
+        {
+            if (DateTime.Now > _endOfGameDateTime)
+            {
+                return true;
+            }
+
+            int playersAlive = 0;
+            foreach (var player in _players)
+            {
+                if (player.IsAlive())
+                {
+                    playersAlive++;
+                }
+            }
+
+            if (playersAlive <= 1)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

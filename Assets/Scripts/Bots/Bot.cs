@@ -46,7 +46,6 @@ namespace Bots
             if (_dateToWakeUp < DateTime.Now)
             {
                 _dateToWakeUp = _controller.AssessBot(_id, Act());
-                Debug.Log("Date to wake up from bot " + _id + " : " + _dateToWakeUp);
             }
         }
 

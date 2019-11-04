@@ -1,3 +1,6 @@
+using System;
+using UnityEngine;
+
 namespace Control
 {
     public class Settings
@@ -15,8 +18,9 @@ namespace Control
         private int _initialHp;
         private int _secondsBetweenActions;
         private float _botAttackHealRate;
+        private TimeSpan _matchDuration;
 
-        public Settings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate)
+        public Settings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate, TimeSpan matchDuration)
         {
             _playersAmount = playersAmount;
             _minDamage = minDamage;
@@ -24,6 +28,7 @@ namespace Control
             _initialHp = initialHp;
             _secondsBetweenActions = secondsBetweenActions;
             _botAttackHealRate = botAttackHealRate;
+            _matchDuration = matchDuration;
         }
 
         public int PlayersAmount
@@ -31,7 +36,13 @@ namespace Control
             get => _playersAmount;
             set => _playersAmount = (value < MinPlayers) ? MinPlayers : value;
         }
-
+        
+        public TimeSpan MatchDuration
+        {
+            get => _matchDuration;
+            set => _matchDuration = value;
+        }
+        
         public int MinimumDamage
         {
             get => _minDamage;

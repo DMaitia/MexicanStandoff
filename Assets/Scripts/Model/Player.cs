@@ -61,7 +61,6 @@ namespace Model
         {
             var newHp = _hp - strike.GetValue();
             _hp =  newHp >= 0 ? newHp : 0;
-            Debug.Log("Player " + _id + " has been hit. New HP: " + _hp);
         }
     
         public void Heal()
