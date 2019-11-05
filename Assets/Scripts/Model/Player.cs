@@ -66,8 +66,7 @@ namespace Model
         public void Heal()
         {
             Healing healing = new Healing(_distribution);
-            int newHp = _hp + healing.GetValue();
-            _hp = (newHp < 1000 ? newHp : 1000); //TODO: deharcode those numbers
+            _hp += healing.GetValue();
         }
         
         public bool WaitingTimeToActionIsOver()
