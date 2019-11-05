@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 48797235}
   - component: {fileID: 48797239}
   m_Layer: 5
-  m_Name: BoardCanvas
+  m_Name: ScoreBoardCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,6 +226,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreboardInfo: {fileID: 1966379961}
+--- !u!1 &74762522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8597505238095122317, guid: ac56f931d4980647898bacdae10c7787,
+    type: 3}
+  m_PrefabInstance: {fileID: 1237816018}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &81443496
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +692,7 @@ MonoBehaviour:
   dollPrefab: {fileID: 3192265899133208376, guid: c08947d8f4c18c572ab85ba19dfc3451,
     type: 3}
   scoreBoard: {fileID: 48797234}
-  settingsMenu: {fileID: 0}
+  settingsMenu: {fileID: 74762522}
   radius: 5
 --- !u!4 &581253536
 Transform:

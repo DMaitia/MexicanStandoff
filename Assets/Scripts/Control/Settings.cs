@@ -18,6 +18,7 @@ namespace Control
         private static int _initialHp = 1000;
         private static int _secondsBetweenActions = 10;
         private static float _botAttackHealRate = 0.5f;
+        private static TimeSpan _matchDuration = new TimeSpan(0,0,1,0);
 
         public static void SetSettings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate, TimeSpan matchDuration)
         {
@@ -27,7 +28,7 @@ namespace Control
             _initialHp = initialHp;
             _secondsBetweenActions = secondsBetweenActions;
             _botAttackHealRate = botAttackHealRate;
-            MatchDuration = matchDuration;
+            _matchDuration = matchDuration;
         }
 
         public static int PlayersAmount
@@ -35,9 +36,12 @@ namespace Control
             get => _playersAmount;
             set => _playersAmount = (value < MinPlayers) ? MinPlayers : value;
         }
-        
-        public static TimeSpan MatchDuration { get; set; }
 
+        public static TimeSpan MatchDuration
+        {
+            get => _matchDuration;
+            set => _matchDuration = value;
+        }
         public static int MinimumDamage
         {
             get => _minDamage;

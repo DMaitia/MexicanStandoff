@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Control;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class SettingsBoard : MonoBehaviour
     public Text initialHpText;
     public Text meanSecondsBetweenActionsText;
     public Text attackHealRateText;
+    public Text matchDuration;
 
     public Text playersAmountPlaceholder;
     public Text minDamagePlaceholder;
@@ -22,6 +24,7 @@ public class SettingsBoard : MonoBehaviour
     public Text initialHpPlaceholder;
     public Text meanSecondsBetweenActionsPlaceholder;
     public Text attackHealRatePlaceholder;
+    public Text matchDurationPlaceholder;
     
     void Awake()
     {
@@ -36,6 +39,7 @@ public class SettingsBoard : MonoBehaviour
         initialHpPlaceholder.text = Settings.InitialHp.ToString();
         meanSecondsBetweenActionsPlaceholder.text = Settings.SecondsBetweenActions.ToString();
         attackHealRatePlaceholder.text = Settings.BotAttackHealRate.ToString();
+        matchDurationPlaceholder.text = Settings.MatchDuration.TotalSeconds.ToString();
     }
 
     public void UpdateSettings()
@@ -68,6 +72,12 @@ public class SettingsBoard : MonoBehaviour
         if (attackHealRateText.text != "")
         {
             Settings.BotAttackHealRate = int.Parse(attackHealRateText.text);
+        }
+
+        if (matchDuration.text != "")
+        {
+            int matchDuration = int.Parse(attackHealRateText.text);
+            Settings.MatchDuration = new TimeSpan(0,0,0, matchDuration);
         }
     }
 }
