@@ -10,5 +10,10 @@ namespace Utils
         {
             SceneManager.LoadScene(sceneName);
         }
+
+        public void LoadNewMatch()
+        {
+            SceneManager.LoadScene("MexicanStandoff");
+        }
     }
 }
