@@ -3,24 +3,23 @@ using UnityEngine;
 
 namespace Control
 {
-    public class Settings
+    public static class Settings
     {
         //Ranges
-        public const float MinBotAttackHealRate = 0.1f;
-        public const float MaxBotAttackHealRate = 0.9f;
-        public const int MinPlayers = 3;
-        public const int MinDamage = 1;
-        public const int MinHp = 1;
+        private const float MinBotAttackHealRate = 0.1f;
+        private const float MaxBotAttackHealRate = 0.9f;
+        private const int MinPlayers = 3;
+        private const int MinDamage = 1;
+        private const int MinHp = 1;
         
-        private int _playersAmount;
-        private int _minDamage;
-        private int _maxDamage;
-        private int _initialHp;
-        private int _secondsBetweenActions;
-        private float _botAttackHealRate;
-        private TimeSpan _matchDuration;
+        private static int _playersAmount = 3;
+        private static int _minDamage = 10;
+        private static int _maxDamage = 100;
+        private static int _initialHp = 1000;
+        private static int _secondsBetweenActions = 10;
+        private static float _botAttackHealRate = 0.5f;
 
-        public Settings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate, TimeSpan matchDuration)
+        public static void SetSettings(int playersAmount, int minDamage, int maxDamage, int initialHp, int secondsBetweenActions, float botAttackHealRate, TimeSpan matchDuration)
         {
             _playersAmount = playersAmount;
             _minDamage = minDamage;
@@ -28,47 +27,42 @@ namespace Control
             _initialHp = initialHp;
             _secondsBetweenActions = secondsBetweenActions;
             _botAttackHealRate = botAttackHealRate;
-            _matchDuration = matchDuration;
+            MatchDuration = matchDuration;
         }
 
-        public int PlayersAmount
+        public static int PlayersAmount
         {
             get => _playersAmount;
             set => _playersAmount = (value < MinPlayers) ? MinPlayers : value;
         }
         
-        public TimeSpan MatchDuration
-        {
-            get => _matchDuration;
-            set => _matchDuration = value;
-        }
-        
-        public int MinimumDamage
+        public static TimeSpan MatchDuration { get; set; }
+
+        public static int MinimumDamage
         {
             get => _minDamage;
             set => _minDamage = (value < MinDamage) ? MinDamage : value;
         }
 
-        public int MaximumDamage
+        public static int MaximumDamage
         {
             get => _maxDamage;
             set => _maxDamage = (value < _minDamage) ? _minDamage + 1 : value;
         }
 
-        public int InitialHp
+        public static int InitialHp
         {
             get => _initialHp;
             set => _initialHp = (value <= 0) ? MinHp : value;
         }
 
-        public int MillisecondsBetweenActions
+        public static int SecondsBetweenActions
         {
-            //TODO: do the random distribution stuff
             get => _secondsBetweenActions;
             set => _secondsBetweenActions = (value <= 0) ? 1 : value;
         }
 
-        public float BotAttackHealRate
+        public static float BotAttackHealRate
         {
             get => _botAttackHealRate;
             set

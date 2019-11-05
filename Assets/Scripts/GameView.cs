@@ -24,15 +24,14 @@ public class GameView : MonoBehaviour
 
     private int _selectedDollId = 2; //Todo: desmockupear
 
-    private Settings _settings;
     
     void Start()
     {
         _dolls = new List<GameObject>();
 
-        _settings = new Settings(5, 10, 100, 1000, 2, 0.5f, new TimeSpan(0,0,0,30));
+//        _settings = new Settings(5, 10, 100, 1000, 2, 0.5f, new TimeSpan(0,0,0,30));
         
-        _controller = new Controller(this, _settings);    
+        _controller = new Controller(this);    
         
         SpawnDolls();
         
@@ -42,9 +41,9 @@ public class GameView : MonoBehaviour
     private void SpawnDolls()
     {
         Vector3 arenaPosition = gameObject.transform.position;
-        double angleBetweenDolls = (2*Math.PI) / _settings.PlayersAmount;
+        double angleBetweenDolls = (2*Math.PI) / Settings.PlayersAmount;
         double theta = 0;
-        for (int i = 0; i < _settings.PlayersAmount; i++)
+        for (int i = 0; i < Settings.PlayersAmount; i++)
         {
             Vector3 dollPosition = new Vector3((float) (radius * Math.Cos(theta)),
                 arenaPosition.y, (float) (radius * Math.Sin(theta))
@@ -60,9 +59,9 @@ public class GameView : MonoBehaviour
 
     private void AddBotBehaviours()
     {
-        for (var id = 1; id < _settings.PlayersAmount; id++)
+        for (var id = 1; id < Settings.PlayersAmount; id++)
         {
-            Bot.CreateBot(_dolls[id], id, _settings.BotAttackHealRate, _controller);
+            Bot.CreateBot(_dolls[id], id, Settings.BotAttackHealRate, _controller);
         }
     }
 

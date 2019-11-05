@@ -11,28 +11,27 @@ namespace Control
     {
         private List<Player> _players;
         private GameView _gameView;
-        private Settings _settings;
         private DateTime _endOfGameDateTime;
-        
-        public Controller(GameView gameView, Settings settings)
+
+        public Controller(GameView gameView)
         {
             _gameView = gameView;
-            _settings = settings;
             
             _players = new List<Player>();
             
-            for (int id = 0; id < _settings.PlayersAmount; id++)
+            for (int id = 0; id < Settings.PlayersAmount; id++)
             {
-                _players.Add(new Player(id, _settings.InitialHp, new Uniform(), _settings.MillisecondsBetweenActions));
+                _players.Add(new Player(id, Settings.InitialHp, new Uniform(), Settings.SecondsBetweenActions));
             }
 
-            _endOfGameDateTime = DateTime.Now + settings.MatchDuration;
+            _endOfGameDateTime = DateTime.Now + Settings.MatchDuration;
         }
 
         public List<Player> GetPlayers()
         { //TODO: la vista no debería acceder a esto
             return _players;
         }
+
         public void Strike(int attackerId, int targetId)
         {
             Player attacker = _players[attackerId];
@@ -97,7 +96,8 @@ namespace Control
             }
             
             player.LastActionDateTime = DateTime.Now;
-            player.NextActionDateTime = DateTime.Now + new TimeSpan(0,0,0,_settings.MillisecondsBetweenActions);
+            player.NextActionDateTime = DateTime.Now + new TimeSpan(0,0,0,Settings.SecondsBetweenActions); //TODO: check this call to Settings, possible bug
+            
 
             return player.NextActionDateTime;
         }
