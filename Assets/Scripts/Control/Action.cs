@@ -1,7 +1,7 @@
 using System;
 using Probability;
 
-namespace Control
+namespace Model
 {
     public abstract class Action
     {
