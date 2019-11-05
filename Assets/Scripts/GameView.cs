@@ -131,6 +131,11 @@ public class GameView : MonoBehaviour
 
     public void FinishGame()
     {
-        throw new NotImplementedException();
+        foreach (var doll in _dolls)
+        {
+            Destroy(doll);
+        }
+
+        DisplayScoreboard();
     }
 }
