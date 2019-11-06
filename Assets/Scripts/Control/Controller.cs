@@ -76,10 +76,10 @@ namespace Control
         /*
          * Return: Amount of milliseconds for the bot to wait until a new action is possible.
          */
-        public DateTime AssessBot(int botId, Bot.ActionType actionType)
+        public void AssessBot(int botId, Bot.ActionType actionType)
         {
             var player = _players[botId];
-            if (!player.WaitingTimeToActionIsOver()) return player.StopDateTime;
+            if (!player.WaitingTimeToActionIsOver()) return;
             
             switch (actionType)
             {
@@ -96,8 +96,6 @@ namespace Control
                 default:
                     throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null);
             }
-            
-            return player.StopDateTime;
         }
 
         private Player LowerHpPlayer(Player attacker)

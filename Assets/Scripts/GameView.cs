@@ -6,6 +6,7 @@ using Control;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameView : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class GameView : MonoBehaviour
 
     public GameObject settingsMenu;
 
+    public Text matchCountDown;
+    
     public float radius;
 
     private List<GameObject> _dolls;
@@ -40,8 +43,14 @@ public class GameView : MonoBehaviour
     void Update()
     {
         ListenForSelection();
+        PrintRemainingTime();
     }
 
+    private void PrintRemainingTime()
+    {
+        matchCountDown.text = "Time remaining: " + ((int) (_controller.StopDateTime - DateTime.Now).TotalSeconds).ToString();
+    }
+    
     private void SpawnDolls()
     {
         Vector3 arenaPosition = gameObject.transform.position;
