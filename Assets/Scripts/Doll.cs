@@ -6,10 +6,15 @@ public class Doll : MonoBehaviour
 {
     private int _secondsToAct;
     private int _hp;
-
+    private int _id;
+    
     public GameObject infoDisplay;
     public Animator animator;
-    
+    public int Id
+    {
+        get => _id;
+        set => _id = value;
+    }
     public void GetHurt(int newHp)
     {
         animator.CrossFade("GettingHit", 0.1f);
@@ -53,7 +58,15 @@ public class Doll : MonoBehaviour
         }
     }
 
+    public void SelectDoll()
+    {
+        gameObject.transform.GetChild(1).gameObject.SetActive(true);
+    }
 
+    public void DeselectDoll()
+    {
+        gameObject.transform.GetChild(1).gameObject.SetActive(false);
+    }
     // Start is called before the first frame update
     void Start()
     {

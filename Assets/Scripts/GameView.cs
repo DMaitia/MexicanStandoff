@@ -10,6 +10,8 @@ public class GameView : MonoBehaviour
 {
     private const int MainPlayerId = 0;
     
+    private const int DefaultSelectedDoll = 1;
+    
     private Controller _controller;
     
     public GameObject dollPrefab;
@@ -22,20 +24,21 @@ public class GameView : MonoBehaviour
 
     private List<GameObject> _dolls;
 
-    private int _selectedDollId = 2; //Todo: desmockupear
+    private int _selectedDollId; //Todo: desmockupear
 
     
     void Start()
     {
         _dolls = new List<GameObject>();
-
-//        _settings = new Settings(5, 10, 100, 1000, 2, 0.5f, new TimeSpan(0,0,0,30));
-        
-        _controller = new Controller(this);    
-        
+        _controller = new Controller(this);
         SpawnDolls();
-        
         AddBotBehaviours();
+        SelectTarget(DefaultSelectedDoll);
+    }
+
+    void Update()
+    {
+        ListenForSelection();
     }
 
     private void SpawnDolls()
@@ -52,7 +55,7 @@ public class GameView : MonoBehaviour
             
             GameObject doll = Instantiate(dollPrefab, dollPosition, Quaternion.identity) as GameObject;
             doll.transform.LookAt(Vector3.zero);
-            doll.AddComponent<Doll>();
+            doll.AddComponent<Doll>().Id = i;
             _dolls.Add(doll);
         }
     }
@@ -154,6 +157,38 @@ public class GameView : MonoBehaviour
         for(var i = 1; i < _dolls.Count; i++)
         {
             _dolls[i].GetComponent<Bot>().SetPause(pause);
+        }
+    }
+    
+    /*
+     * ListenForSelection
+     * Method to listen if the user has selected an enemy doll.
+     */
+    private void ListenForSelection()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hitInfo = new RaycastHit();
+            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+            
+            if (hit) 
+            {
+                if (hitInfo.transform.gameObject.CompareTag("Enemy"))
+                {
+                    GameObject target = hitInfo.transform.gameObject;
+                    SelectTarget(target.GetComponent<Doll>().Id);
+                } 
+            } 
+        }
+    }
+
+    private void SelectTarget(int id)
+    {
+        if (id != 0 && id != _selectedDollId)
+        {
+            _dolls[_selectedDollId].GetComponent<Doll>().DeselectDoll();
+            _dolls[id].GetComponent<Doll>().SelectDoll();
+            _selectedDollId = id;
         }
     }
 }
