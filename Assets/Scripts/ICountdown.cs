@@ -10,5 +10,6 @@ interface ICountdown
     
     TimeSpan TimeRemaining { get; set; }
     
+    int SecondsBetweenActions { get; set; }
     void SetPause(bool paused);
 }

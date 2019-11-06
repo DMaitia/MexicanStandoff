@@ -17,6 +17,7 @@ namespace Model
             StartDateTime = DateTime.Now;
             StopDateTime = StartDateTime + new TimeSpan(0,0,0,secondsBetweenActions);
             IsPaused = false;
+            SecondsBetweenActions = secondsBetweenActions;
         }
         
         public int Id => _id;
@@ -28,11 +29,16 @@ namespace Model
             return Hp > 0;
         }
         
-        public void Strike(Player target)
+        public bool Strike(Player target)
         {
+            if (DateTime.Now < StopDateTime) return false;
             Strike strike = new Strike(_distribution);
             target.ReceiveStrike(strike);
+            StartDateTime = DateTime.Now;
+            StopDateTime = StartDateTime + new TimeSpan(0,0,0,SecondsBetweenActions);
+            return true;
         }
+        
         
         private void ReceiveStrike(Strike strike)
         {
@@ -55,6 +61,7 @@ namespace Model
         public DateTime StartDateTime { get; set; }
         public DateTime StopDateTime { get; set; }
         public TimeSpan TimeRemaining { get; set; }
+        public int SecondsBetweenActions { get; set; }
 
         public void SetPause(bool pauseGame)
         {

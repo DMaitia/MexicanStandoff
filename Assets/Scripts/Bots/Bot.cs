@@ -49,6 +49,7 @@ namespace Bots
         public DateTime StartDateTime { get; set; }
         public DateTime StopDateTime { get; set; }
         public TimeSpan TimeRemaining { get; set; }
+        public int SecondsBetweenActions { get; set; }
 
         public void SetPause(bool pauseGame)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bots;
 using Model;
 using Probability;
+using UnityEngine;
 
 namespace Control
 {
@@ -24,7 +25,7 @@ namespace Control
             }
 
             StopDateTime = DateTime.Now + Settings.MatchDuration;
-            _secondsBetweenActions = Settings.SecondsBetweenActions;
+            SecondsBetweenActions = Settings.SecondsBetweenActions;
         }
 
         public List<Player> GetPlayers()
@@ -36,12 +37,13 @@ namespace Control
         {
             Player attacker = _players[attackerId];
             Player target = _players[targetId];
-            if (!target.IsAlive() || attacker.Id == target.Id)
+            if (!target.IsAlive() || attacker.Id == target.Id || DateTime.Now < attacker.StopDateTime)
             {
                 return;
             }
 
-            attacker.Strike(target);
+            if (attacker.Strike(target) == false) return;
+            
             if (target.IsAlive())
             {
                 _gameView.PerformStrikeAnimation(attackerId, targetId, target.Hp);
@@ -61,7 +63,7 @@ namespace Control
         public bool Heal(int targetId)
         {
             Player target = _players[targetId];
-            if (!target.IsAlive())
+            if (!target.IsAlive() || DateTime.Now < target.StopDateTime)
             {
                 return false;
             }
@@ -95,8 +97,6 @@ namespace Control
                     throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null);
             }
             
-            player.StartDateTime = DateTime.Now;
-            player.StopDateTime = DateTime.Now + new TimeSpan(0,0,0,_secondsBetweenActions);
             return player.StopDateTime;
         }
 
@@ -160,6 +160,7 @@ namespace Control
         public DateTime StartDateTime { get; set; }
         public DateTime StopDateTime { get; set; }
         public TimeSpan TimeRemaining { get; set; }
+        public int SecondsBetweenActions { get; set; }
 
         public void SetPause(bool pauseGame)
         {
