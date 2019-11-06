@@ -1,4 +1,6 @@
 using System;
+using Control;
+using Logging;
 using Probability;
 
 namespace Model
@@ -33,6 +35,9 @@ namespace Model
         {
             if (DateTime.Now < StopDateTime) return false;
             Strike strike = new Strike(_distribution);
+            
+            Logger.LogAction(_id, target._id, strike);
+            
             target.ReceiveStrike(strike);
             StartDateTime = DateTime.Now;
             StopDateTime = StartDateTime + new TimeSpan(0,0,0,SecondsBetweenActions);
@@ -49,6 +54,7 @@ namespace Model
         public void Heal()
         {
             Healing healing = new Healing(_distribution);
+            Logger.LogAction(_id, _id, healing);
             Hp += healing.GetValue();
         }
         

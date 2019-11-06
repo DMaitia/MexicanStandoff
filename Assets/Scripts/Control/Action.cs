@@ -1,18 +1,18 @@
-using System;
-using Control;
 using Probability;
-using UnityEngine;
 
-namespace Model
+namespace Control
 {
     public abstract class Action
     {
         protected static int _value;
-    
+        public static int Value => _value;
+
         public Action(Distribution distribution)
         {
             _value = (int) (distribution.F(RandomSingleton.Instance.GetRandomNormalized()) * (Settings.MaximumDamage - Settings.MinimumDamage));
         }
+
+        public abstract override string ToString();
 
         public int GetValue()
         {
@@ -26,6 +26,11 @@ namespace Model
         public Strike(Distribution distribution) : base(distribution)
         {
         }
+
+        public override string ToString()
+        {
+            return "Strike";
+        }
     }
 
 
@@ -33,6 +38,11 @@ namespace Model
     {
         public Healing(Distribution distribution) : base(distribution)
         {
+        }
+
+        public override string ToString()
+        {
+            return "Healing";
         }
     }
 }

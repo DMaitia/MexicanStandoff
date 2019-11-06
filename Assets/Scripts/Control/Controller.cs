@@ -4,6 +4,7 @@ using Bots;
 using Model;
 using Probability;
 using UnityEngine;
+using Logger = Logging.Logger;
 
 namespace Control
 {
@@ -11,12 +12,11 @@ namespace Control
     {
         private List<Player> _players;
         private GameView _gameView;
-
+        
         private int _secondsBetweenActions;
         public Controller(GameView gameView)
         {
             _gameView = gameView;
-            
             _players = new List<Player>();
             
             for (var id = 0; id < Settings.PlayersAmount; id++)
@@ -57,6 +57,10 @@ namespace Control
             if (IsGameOver())
             {
                 _gameView.FinishGame();
+                foreach (var loggedEvent in Logger.GetLoggedEvents())
+                {
+                    Debug.Log(loggedEvent.originId + " , " + loggedEvent.targetId + " , " + loggedEvent.action + " , " + loggedEvent.value);
+                }
             };
         }
 
