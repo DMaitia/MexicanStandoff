@@ -1522,7 +1522,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1197432124}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 581253535}
+        m_MethodName: OnHealButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1197432124
@@ -2283,6 +2294,9 @@ PrefabInstance:
       objectReference: {fileID: 1706806387}
     m_RemovedComponents:
     - {fileID: 9186138748573130049, guid: 7bd3ec5ece6693845873ab858c3d0cd8, type: 3}
+    - {fileID: 4015244930562219455, guid: 7bd3ec5ece6693845873ab858c3d0cd8, type: 3}
+    - {fileID: 1310698800038443504, guid: 7bd3ec5ece6693845873ab858c3d0cd8, type: 3}
+    - {fileID: 6955063722364266546, guid: 7bd3ec5ece6693845873ab858c3d0cd8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7bd3ec5ece6693845873ab858c3d0cd8, type: 3}
 --- !u!1 &6366470702940444609 stripped
 GameObject:

@@ -25,10 +25,9 @@ public class Doll : MonoBehaviour
         animator.CrossFade("GettingKilled", 0.1f);
     }
 
-    public void Heal(uint newHp)
+    public void Heal()
     {
         animator.CrossFade("Healing", 0.1f);
-        //TODO: increment health bar
     }
 
     public void Strike(GameObject targetDoll)

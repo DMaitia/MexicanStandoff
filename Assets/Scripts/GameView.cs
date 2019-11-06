@@ -49,6 +49,10 @@ public class GameView : MonoBehaviour
     {
         ListenForSelection();
         PrintRemainingTime();
+        if (_controller.StopDateTime < DateTime.Now)
+        {
+            _controller.ConfirmGameOver();
+        }
     }
 
     private void PrintRemainingTime()
@@ -92,10 +96,10 @@ public class GameView : MonoBehaviour
     {
         _controller.Strike(MainPlayerId, _selectedDollId);
     }
-    
-    public void UpdateDollTimer(uint idDoll, uint time)
+
+    public void OnHealButtonClick()
     {
-        
+        _controller.Heal(MainPlayerId);
     }
 
     public void DisplayConfiguration()
@@ -156,7 +160,7 @@ public class GameView : MonoBehaviour
     public void PerformHealingAnimation(int idDoll)
     {
         GameObject target = _dolls[idDoll];
-        target.GetComponent<Doll>().Heal(100);//TODO? hace falta?
+        target.GetComponent<Doll>().Heal();
     }
 
     public void FinishGame()

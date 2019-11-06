@@ -57,10 +57,6 @@ namespace Control
             if (IsGameOver())
             {
                 _gameView.FinishGame();
-                foreach (var loggedEvent in Logger.GetLoggedEvents())
-                {
-                    Debug.Log(loggedEvent.originId + " , " + loggedEvent.targetId + " , " + loggedEvent.action + " , " + loggedEvent.value);
-                }
             };
         }
 
@@ -158,6 +154,14 @@ namespace Control
             return false;
         }
 
+        public void ConfirmGameOver()
+        {
+            if (IsGameOver())
+            {
+                _gameView.FinishGame();
+            };
+        }
+        
         public bool IsPaused { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime StopDateTime { get; set; }
