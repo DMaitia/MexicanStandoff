@@ -73,8 +73,8 @@ namespace UserInterface
 
             if (matchDuration.text != "")
             {
-                int matchDuration = int.Parse(attackHealRateText.text);
-                Settings.MatchDuration = new TimeSpan(0,0,0, matchDuration);
+                int matchDurationInSeconds = int.Parse(matchDuration.text);
+                Settings.MatchDuration = new TimeSpan(0,0,0, matchDurationInSeconds);
             }
         }
     }
