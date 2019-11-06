@@ -7,11 +7,13 @@ using UnityEngine;
 
 namespace Control
 {
-    public class Controller
+    public class Controller : ITimer
     {
         private List<Player> _players;
         private GameView _gameView;
         private DateTime _endOfGameDateTime;
+        private bool _gameIsPaused = false;
+        private TimeSpan _pausedGameRemainingTime;
 
         public Controller(GameView gameView)
         {
@@ -19,7 +21,7 @@ namespace Control
             
             _players = new List<Player>();
             
-            for (int id = 0; id < Settings.PlayersAmount; id++)
+            for (var id = 0; id < Settings.PlayersAmount; id++)
             {
                 _players.Add(new Player(id, Settings.InitialHp, new Uniform(), Settings.SecondsBetweenActions));
             }
@@ -156,6 +158,34 @@ namespace Control
             }
 
             return false;
+        }
+
+        public void SetPause(bool pauseGame)
+        {
+            if (pauseGame)
+            {
+                _pausedGameRemainingTime =  _endOfGameDateTime - DateTime.Now;
+                Debug.Log("Game paused. Remaining time: " + _pausedGameRemainingTime.TotalSeconds);
+                Debug.Log("End of game datetime after pause: " + _endOfGameDateTime.ToString());
+                foreach (var player in _players)
+                {
+                    player.SetPause(true);
+                }
+            }
+            else
+            {
+                _endOfGameDateTime = DateTime.Now + _pausedGameRemainingTime;
+                
+                Debug.Log("Game resumed. Remaining time: " + _pausedGameRemainingTime.TotalSeconds);
+                Debug.Log("End of game datetime after resume: " + _endOfGameDateTime.ToString());
+
+                foreach (var player in _players)
+                {
+                    player.SetPause(false);
+                }
+            }
+            _gameView.PauseBots(pauseGame);
+            _gameIsPaused = pauseGame;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Model
 {
-    public class Player
+    public class Player : ITimer
     {
         private readonly int _id;
         
@@ -15,8 +15,12 @@ namespace Model
 
         private DateTime _lastActionDateTime;
         
+        private TimeSpan _pausedGameRemainingTimeToWakeUp;
+        
         private Distribution _distribution;
         
+        private bool _gameIsPaused = false;
+
         public Player(int id, int initialHp, Distribution distribution, int secondsBetweenActions)
         {
             _id = id;
@@ -74,6 +78,19 @@ namespace Model
             return _nextActionDateTime < DateTime.Now;
         }
 
+        public void SetPause(bool pauseGame)
+        {
+            _gameIsPaused = pauseGame;
+            if (pauseGame)
+            {
+                _pausedGameRemainingTimeToWakeUp = _nextActionDateTime - DateTime.Now;
+            }
+            else
+            {
+                _nextActionDateTime = DateTime.Now + _pausedGameRemainingTimeToWakeUp;
+            }
+        }
+        
         public double SecondsToNextAction()
         {
             return (NextActionDateTime - DateTime.Now).TotalSeconds;

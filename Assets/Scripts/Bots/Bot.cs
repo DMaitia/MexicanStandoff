@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Bots
 {
-    public class Bot : MonoBehaviour
+    public class Bot : MonoBehaviour, ITimer
     {
         public enum ActionType {Strike, Heal}
         
@@ -15,6 +15,10 @@ namespace Bots
         private int _id;
         private Controller _controller;
         private DateTime _dateToWakeUp;
+        private TimeSpan _pausedGameRemainingTimeToWakeUp;
+        
+        private bool _gameIsPaused = false;
+        private const int SecondsToWaitAfterStart = 5;
 
         public static Bot CreateBot(GameObject doll, int id, float attackVsHealRate, Controller controller)
         {
@@ -30,7 +34,7 @@ namespace Bots
             _id = id;
             _attackVsHealRate = attackVsHealRate;
             _controller = controller;
-            _dateToWakeUp = DateTime.Now + new TimeSpan(0, 0, 0, 5);
+            _dateToWakeUp = DateTime.Now + new TimeSpan(0, 0, 0, SecondsToWaitAfterStart);
         }
 
         public int Id => _id;
@@ -43,12 +47,24 @@ namespace Bots
 
         public void Update()
         {
-            if (_dateToWakeUp < DateTime.Now)
+            if (!_gameIsPaused && _dateToWakeUp < DateTime.Now)
             {
                 _dateToWakeUp = _controller.AssessBot(_id, Act());
             }
         }
-
+        public void SetPause(bool pauseGame)
+        {
+            _gameIsPaused = pauseGame;
+            if (pauseGame)
+            {
+                _pausedGameRemainingTimeToWakeUp = _dateToWakeUp - DateTime.Now;
+            }
+            else
+            {
+                _dateToWakeUp = DateTime.Now + _pausedGameRemainingTimeToWakeUp;
+            }
+        }
+        
         private ActionType Act()
         {
             var n = RandomSingleton.Instance.GetRandomNormalized();

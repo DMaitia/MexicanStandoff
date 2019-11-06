@@ -138,4 +138,22 @@ public class GameView : MonoBehaviour
 
         DisplayScoreboard();
     }
+
+    public void PauseGame()
+    {
+        _controller.SetPause(true);
+    }
+
+    public void ResumeGame()
+    {
+        _controller.SetPause(false);
+    }
+
+    public void PauseBots(bool pause)
+    {
+        for(var i = 1; i < _dolls.Count; i++)
+        {
+            _dolls[i].GetComponent<Bot>().SetPause(pause);
+        }
+    }
 }
