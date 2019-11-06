@@ -1,5 +1,7 @@
 using System;
+using Control;
 using Probability;
+using UnityEngine;
 
 namespace Model
 {
@@ -9,8 +11,7 @@ namespace Model
     
         public Action(Distribution distribution)
         {
-            
-            _value = (int) (distribution.F(RandomSingleton.Instance.GetRandom()) * 90);
+            _value = (int) (distribution.F(RandomSingleton.Instance.GetRandomNormalized()) * (Settings.MaximumDamage - Settings.MinimumDamage));
         }
 
         public int GetValue()
