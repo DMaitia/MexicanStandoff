@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Start.unity
     guid: 0bfb88b245c2bf20988498c86556ab03
+  - enabled: 1
+    path: Assets/Scenes/MexicanStandoff.unity
+    guid: 087bf8d1541e177e2beebe589ccae01a
   m_configObjects: {}
