@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using Bots;
 using Model;
 using Probability;
-using UnityEngine;
 
 namespace Control
 {
-    public class Controller : ITimer
+    public class Controller : ICountdown
     {
         private List<Player> _players;
         private GameView _gameView;
-        private DateTime _endOfGameDateTime;
-        private bool _gameIsPaused = false;
-        private TimeSpan _pausedGameRemainingTime;
 
         public Controller(GameView gameView)
         {
@@ -26,7 +22,7 @@ namespace Control
                 _players.Add(new Player(id, Settings.InitialHp, new Uniform(), Settings.SecondsBetweenActions));
             }
 
-            _endOfGameDateTime = DateTime.Now + Settings.MatchDuration;
+            StopDateTime = DateTime.Now + Settings.MatchDuration;
         }
 
         public List<Player> GetPlayers()
@@ -79,7 +75,7 @@ namespace Control
         public DateTime AssessBot(int botId, Bot.ActionType actionType)
         {
             var player = _players[botId];
-            if (!player.WaitingTimeToActionIsOver()) return player.NextActionDateTime;
+            if (!player.WaitingTimeToActionIsOver()) return player.StopDateTime;
             
             switch (actionType)
             {
@@ -97,11 +93,11 @@ namespace Control
                     throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null);
             }
             
-            player.LastActionDateTime = DateTime.Now;
-            player.NextActionDateTime = DateTime.Now + new TimeSpan(0,0,0,Settings.SecondsBetweenActions); //TODO: check this call to Settings, possible bug
+            player.StartDateTime = DateTime.Now;
+            player.StopDateTime = DateTime.Now + new TimeSpan(0,0,0,Settings.SecondsBetweenActions); //TODO: check this call to Settings, possible bug
             
 
-            return player.NextActionDateTime;
+            return player.StopDateTime;
         }
 
         private Player LowerHpPlayer(Player attacker)
@@ -138,7 +134,7 @@ namespace Control
 
         private bool IsGameOver()
         {
-            if (DateTime.Now > _endOfGameDateTime)
+            if (DateTime.Now > StopDateTime)
             {
                 return true;
             }
@@ -160,13 +156,16 @@ namespace Control
             return false;
         }
 
+        public bool IsPaused { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime StopDateTime { get; set; }
+        public TimeSpan TimeRemaining { get; set; }
+
         public void SetPause(bool pauseGame)
         {
             if (pauseGame)
             {
-                _pausedGameRemainingTime =  _endOfGameDateTime - DateTime.Now;
-                Debug.Log("Game paused. Remaining time: " + _pausedGameRemainingTime.TotalSeconds);
-                Debug.Log("End of game datetime after pause: " + _endOfGameDateTime.ToString());
+                TimeRemaining =  StopDateTime - DateTime.Now;
                 foreach (var player in _players)
                 {
                     player.SetPause(true);
@@ -174,18 +173,14 @@ namespace Control
             }
             else
             {
-                _endOfGameDateTime = DateTime.Now + _pausedGameRemainingTime;
-                
-                Debug.Log("Game resumed. Remaining time: " + _pausedGameRemainingTime.TotalSeconds);
-                Debug.Log("End of game datetime after resume: " + _endOfGameDateTime.ToString());
-
+                StopDateTime = DateTime.Now + TimeRemaining;
                 foreach (var player in _players)
                 {
                     player.SetPause(false);
                 }
             }
             _gameView.PauseBots(pauseGame);
-            _gameIsPaused = pauseGame;
+            IsPaused = pauseGame;
         }
     }
 }

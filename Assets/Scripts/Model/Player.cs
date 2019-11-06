@@ -1,58 +1,31 @@
 using System;
-using Control;
 using Probability;
-using UnityEngine;
 
 namespace Model
 {
-    public class Player : ITimer
+    public class Player : ICountdown
     {
         private readonly int _id;
-        
-        private int _hp;
 
-        private DateTime _nextActionDateTime;
-
-        private DateTime _lastActionDateTime;
-        
-        private TimeSpan _pausedGameRemainingTimeToWakeUp;
-        
         private Distribution _distribution;
         
-        private bool _gameIsPaused = false;
-
         public Player(int id, int initialHp, Distribution distribution, int secondsBetweenActions)
         {
             _id = id;
-            _hp = initialHp;
+            Hp = initialHp;
             _distribution = distribution;
-            _lastActionDateTime = DateTime.Now;
-            _nextActionDateTime = _lastActionDateTime + new TimeSpan(0,0,0,secondsBetweenActions);
+            StartDateTime = DateTime.Now;
+            StopDateTime = StartDateTime + new TimeSpan(0,0,0,secondsBetweenActions);
+            IsPaused = false;
         }
         
         public int Id => _id;
 
-        public int Hp
-        {
-            get => _hp;
-            set => _hp = value;
-        }
+        public int Hp { get; private set; }
 
-        public DateTime NextActionDateTime
-        {
-            get => _nextActionDateTime;
-            set => _nextActionDateTime = value;
-        }
-
-        public DateTime LastActionDateTime
-        {
-            get => _lastActionDateTime;
-            set => _lastActionDateTime = value;
-        }
-        
         public bool IsAlive()
         {
-            return _hp > 0;
+            return Hp > 0;
         }
         
         public void Strike(Player target)
@@ -63,37 +36,42 @@ namespace Model
         
         private void ReceiveStrike(Strike strike)
         {
-            var newHp = _hp - strike.GetValue();
-            _hp =  newHp >= 0 ? newHp : 0;
+            var newHp = Hp - strike.GetValue();
+            Hp =  newHp >= 0 ? newHp : 0;
         }
     
         public void Heal()
         {
             Healing healing = new Healing(_distribution);
-            _hp += healing.GetValue();
+            Hp += healing.GetValue();
         }
         
         public bool WaitingTimeToActionIsOver()
         {
-            return _nextActionDateTime < DateTime.Now;
+            return StopDateTime < DateTime.Now;
         }
+
+        public bool IsPaused { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime StopDateTime { get; set; }
+        public TimeSpan TimeRemaining { get; set; }
 
         public void SetPause(bool pauseGame)
         {
-            _gameIsPaused = pauseGame;
+            IsPaused = pauseGame;
             if (pauseGame)
             {
-                _pausedGameRemainingTimeToWakeUp = _nextActionDateTime - DateTime.Now;
+                TimeRemaining = StopDateTime - DateTime.Now;
             }
             else
             {
-                _nextActionDateTime = DateTime.Now + _pausedGameRemainingTimeToWakeUp;
+                StopDateTime = DateTime.Now + TimeRemaining;
             }
         }
         
         public double SecondsToNextAction()
         {
-            return (NextActionDateTime - DateTime.Now).TotalSeconds;
+            return (StopDateTime - DateTime.Now).TotalSeconds;
         }
     }
 }

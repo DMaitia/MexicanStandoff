@@ -7,17 +7,13 @@ using UnityEngine;
 
 namespace Bots
 {
-    public class Bot : MonoBehaviour, ITimer
+    public class Bot : MonoBehaviour, ICountdown
     {
         public enum ActionType {Strike, Heal}
         
         private float _attackVsHealRate;
         private int _id;
         private Controller _controller;
-        private DateTime _dateToWakeUp;
-        private TimeSpan _pausedGameRemainingTimeToWakeUp;
-        
-        private bool _gameIsPaused = false;
         private const int SecondsToWaitAfterStart = 5;
 
         public static Bot CreateBot(GameObject doll, int id, float attackVsHealRate, Controller controller)
@@ -34,34 +30,36 @@ namespace Bots
             _id = id;
             _attackVsHealRate = attackVsHealRate;
             _controller = controller;
-            _dateToWakeUp = DateTime.Now + new TimeSpan(0, 0, 0, SecondsToWaitAfterStart);
+            StopDateTime = DateTime.Now + new TimeSpan(0, 0, 0, SecondsToWaitAfterStart);
+            IsPaused = false;
         }
 
         public int Id => _id;
 
-        public DateTime DateToWakeUp
-        {
-            get => _dateToWakeUp;
-            set => _dateToWakeUp = value;
-        }
 
         public void Update()
         {
-            if (!_gameIsPaused && _dateToWakeUp < DateTime.Now)
+            if (!IsPaused && StopDateTime < DateTime.Now)
             {
-                _dateToWakeUp = _controller.AssessBot(_id, Act());
+                StopDateTime = _controller.AssessBot(_id, Act());
             }
         }
+
+        public bool IsPaused { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime StopDateTime { get; set; }
+        public TimeSpan TimeRemaining { get; set; }
+
         public void SetPause(bool pauseGame)
         {
-            _gameIsPaused = pauseGame;
+            IsPaused = pauseGame;
             if (pauseGame)
             {
-                _pausedGameRemainingTimeToWakeUp = _dateToWakeUp - DateTime.Now;
+                TimeRemaining = StopDateTime - DateTime.Now;
             }
             else
             {
-                _dateToWakeUp = DateTime.Now + _pausedGameRemainingTimeToWakeUp;
+                StopDateTime = DateTime.Now + TimeRemaining;
             }
         }
         
