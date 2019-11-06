@@ -3,7 +3,7 @@ using Control;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface
+namespace UnityScripts.UserInterface
 {
     public class SettingsBoard : MonoBehaviour
     {

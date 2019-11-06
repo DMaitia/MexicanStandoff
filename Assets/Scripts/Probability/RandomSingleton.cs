@@ -4,10 +4,7 @@ namespace Probability
 {
     public class RandomSingleton
     {
-        //No thread safe!!
-        //TODO: Impelment thread safety
-
-        public const int LOWER_LIMIT = 0;//TODO: set these values from configuration
+        public const int LOWER_LIMIT = 0;
         public const int UPPER_LIMIT = 100;
 		
         private readonly Random _random;

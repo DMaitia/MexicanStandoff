@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Logging;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface
+namespace UnityScripts.UserInterface
 {
-    public class ScoreBoard : MonoBehaviour
+    public class LogBoard : MonoBehaviour
     {
         public GameObject container;
 
@@ -26,7 +26,7 @@ namespace UserInterface
                 - ((RectTransform) inputLine.transform).rect.height / 2, 0); 
         }
 
-        public void AddRecord(String id, String playerName, String healthPoints)
+        public void AddRecord(ActionEventInfo actionEventInfo)
         {
             _lastInputLine = inputLine;
             RectTransform rt = (RectTransform)_lastInputLine.transform;
@@ -36,9 +36,10 @@ namespace UserInterface
             Debug.Log(_nextRecordPosition);
             Debug.Log(recordLocalPosition);
             record.transform.localPosition = recordLocalPosition;
-            record.transform.GetChild(0).GetComponent<Text>().text = id;
-            record.transform.GetChild(1).GetComponent<Text>().text = playerName;
-            record.transform.GetChild(2).GetComponent<Text>().text = healthPoints;
+            record.transform.GetChild(0).GetComponent<Text>().text = actionEventInfo.originId.ToString();
+            record.transform.GetChild(1).GetComponent<Text>().text = actionEventInfo.targetId.ToString();
+            record.transform.GetChild(2).GetComponent<Text>().text = actionEventInfo.action.ToString();
+            record.transform.GetChild(3).GetComponent<Text>().text = actionEventInfo.value.ToString();
             _nextRecordPosition = recordLocalPosition;
         }
 

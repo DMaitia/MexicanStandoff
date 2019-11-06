@@ -1,10 +1,9 @@
-
 using System;
 using Control;
 using Probability;
 using UnityEngine;
 
-namespace Bots
+namespace UnityScripts.Bots
 {
     public class Bot : MonoBehaviour, ICountdown
     {

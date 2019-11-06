@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bots;
-using Model;
+using Players;
 using Probability;
 using UnityEngine;
+using UnityScripts;
+using UnityScripts.Bots;
 using Logger = Logging.Logger;
 
 namespace Control

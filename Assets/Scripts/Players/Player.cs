@@ -2,8 +2,9 @@ using System;
 using Control;
 using Logging;
 using Probability;
+using UnityScripts;
 
-namespace Model
+namespace Players
 {
     public class Player : ICountdown
     {
