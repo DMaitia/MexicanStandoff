@@ -57,7 +57,11 @@ public class GameView : MonoBehaviour
 
     private void PrintRemainingTime()
     {
-        matchCountDown.text = "Time remaining: " + ((int) (_controller.StopDateTime - DateTime.Now).TotalSeconds).ToString();
+        int remainingSeconds = ((int) (_controller.StopDateTime - DateTime.Now).TotalSeconds);
+        if (remainingSeconds >= 0)
+        {
+            matchCountDown.text = "Time remaining: " + remainingSeconds;
+        }
     }
     
     private void SpawnDolls()
@@ -170,7 +174,7 @@ public class GameView : MonoBehaviour
             Destroy(doll);
         }
 
-        DisplayScoreboard();
+//        DisplayScoreboard();
     }
 
     public void PauseGame()

@@ -26,6 +26,7 @@ namespace Control
 
             StopDateTime = DateTime.Now + Settings.MatchDuration;
             SecondsBetweenActions = Settings.SecondsBetweenActions;
+            Logger.ClearLog();
         }
 
         public List<Player> GetPlayers()
