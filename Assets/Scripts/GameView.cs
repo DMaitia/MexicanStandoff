@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Bots;
 using Control;
+using Logging;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
+using UserInterface;
+using Logger = Logging.Logger;
 
 public class GameView : MonoBehaviour
 {
@@ -20,7 +23,9 @@ public class GameView : MonoBehaviour
 
     public GameObject scoreBoard;
 
-    public GameObject settingsMenu;
+    public GameObject settingsBoard;
+
+    public GameObject logBoard;
 
     public Text matchCountDown;
     
@@ -95,7 +100,7 @@ public class GameView : MonoBehaviour
 
     public void DisplayConfiguration()
     {
-        settingsMenu.SetActive(true);
+        settingsBoard.SetActive(true);
     }
 
     public void DisplayScoreboard()
@@ -108,9 +113,16 @@ public class GameView : MonoBehaviour
             sb.AddRecord("", "Player " + player.Id, player.Hp.ToString());
         }
     }
-    public void DisplayLog()
+    public void DisplayLogboard()
     {
-        
+        logBoard.SetActive(true);
+        LogBoard lb = logBoard.GetComponent<LogBoard>();
+        lb.ClearRecords();
+        List<ActionEventInfo> events = Logger.GetLoggedEvents();
+        for (var i = events.Count - 1; i >= 0; i--)
+        {
+            lb.AddRecord(events[i]);
+        }
     }
     
     public void PerformStrikeAnimation(int idDoll1, int idDoll2, int newHp)
