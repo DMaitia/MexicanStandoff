@@ -5,6 +5,7 @@ using Bots;
 using Control;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameView : MonoBehaviour
 {
@@ -90,8 +91,13 @@ public class GameView : MonoBehaviour
 
     public void DisplayScoreboard()
     {
-        scoreBoard.GetComponent<ScoreboardScript>().ShowPlayers(_controller.GetPlayers());
         scoreBoard.SetActive(true);
+        ScoreBoard sb = scoreBoard.GetComponent<ScoreBoard>();
+        sb.ClearRecords();
+        foreach (var player in _controller.GetPlayers())
+        {
+            sb.AddRecord("", "Player " + player.Id, player.Hp.ToString());
+        }
     }
     public void DisplayLog()
     {

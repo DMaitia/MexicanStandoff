@@ -11,6 +11,7 @@ namespace Control
         private List<Player> _players;
         private GameView _gameView;
 
+        private int _secondsBetweenActions;
         public Controller(GameView gameView)
         {
             _gameView = gameView;
@@ -23,10 +24,11 @@ namespace Control
             }
 
             StopDateTime = DateTime.Now + Settings.MatchDuration;
+            _secondsBetweenActions = Settings.SecondsBetweenActions;
         }
 
         public List<Player> GetPlayers()
-        { //TODO: la vista no debería acceder a esto
+        { 
             return _players;
         }
 
@@ -94,9 +96,7 @@ namespace Control
             }
             
             player.StartDateTime = DateTime.Now;
-            player.StopDateTime = DateTime.Now + new TimeSpan(0,0,0,Settings.SecondsBetweenActions); //TODO: check this call to Settings, possible bug
-            
-
+            player.StopDateTime = DateTime.Now + new TimeSpan(0,0,0,_secondsBetweenActions);
             return player.StopDateTime;
         }
 
